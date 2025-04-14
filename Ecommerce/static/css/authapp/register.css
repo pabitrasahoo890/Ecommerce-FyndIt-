@@ -1,0 +1,86 @@
+/* authapp/register.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+* {
+    font-family: "Playwrite IT Moderna", cursive;
+}
+body {
+    background: url('/static/images/authapp/cart-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding-left: 10%; /* Move the form towards the left */
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+}
+
+
+.registration-box {
+    width: 350px; /* Decrease width to make it smaller */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent background */
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    position: absolute;
+    text-align: center;
+    left: 10%; /* Keep left aligned */
+    top: 50%; /* Move it down */
+    transform: translateY(-50%); /* Center it vertically */
+}
+
+.registration-box h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+    color: #301919;
+}
+
+.registration-box input {
+    width: 80%; /* Align input boxes from both sides */
+    padding: 12px;
+    margin: 8px 5%; /* Reduce margin to move inputs upward */
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Make input boxes oval */
+    font-size: 16px;
+    text-align: center;
+    background-color: rgb(236, 234, 227);
+    /* font-family: 'Poppins', sans-serif; */
+    /* font-family: "Playwrite IT Moderna", cursive; */
+}
+
+.registration-box input[name="pincode"] {
+    margin-bottom: 30px; /* Increase space below pincode field */
+}
+
+.registration-box button {
+    width: 100%;
+    padding: 12px;
+    background: #301919;
+    /* background: #28a745; */
+    color: white;
+    border: none;
+    border-radius: 25px; /* Make button oval */
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.registration-box button:hover {
+    background: #12942e;
+    
+}
+p a {
+    color: #0051ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+.text-danger{
+    color: rgb(176, 43, 43);
+}

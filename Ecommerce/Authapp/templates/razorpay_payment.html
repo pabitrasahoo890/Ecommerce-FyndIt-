@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>Complete Your Payment</h2>
+    <p>Amount to Pay: ₹{{ total_amount }}</p>
+    
+    <button id="rzp-button" class="btn btn-primary">Pay Now</button>
+    
+    <hr>
+    <a href="{% url 'checkout' %}"><button class="btn btn-danger">Cancel Payment</button></a>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": "{{ total_amount|floatformat:2 }}00",  // convert to paisa
+        "currency": "INR",
+        "name": "Fynd It",
+        "description": "Secure Payment",
+        "order_id": "{{ razorpay_order_id }}",
+        "handler": function (response){
+            // Create a form and submit it to your success view
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{{ callback_url }}";
+            
+            var payment_id = document.createElement('input');
+            payment_id.type = 'hidden';
+            payment_id.name = 'razorpay_payment_id';
+            payment_id.value = response.razorpay_payment_id;
+            form.appendChild(payment_id);
+            
+            var order_id = document.createElement('input');
+            order_id.type = 'hidden';
+            order_id.name = 'razorpay_order_id';
+            order_id.value = response.razorpay_order_id;
+            form.appendChild(order_id);
+            
+            var signature = document.createElement('input');
+            signature.type = 'hidden';
+            signature.name = 'razorpay_signature';
+            signature.value = response.razorpay_signature;
+            form.appendChild(signature);
+            
+            document.body.appendChild(form);
+            form.submit();
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    
+    var rzp = new Razorpay(options);
+    document.getElementById('rzp-button').onclick = function(e){
+        rzp.open();
+        e.preventDefault();
+    }
+</script>
+{% endblock %}

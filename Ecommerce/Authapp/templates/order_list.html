@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-end">
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Back</a>
+    </div>
+    <h2 class="mb-3">My Orders</h2>
+    <!-- Filter Dropdown -->
+    <form method="GET" class="mb-3">
+        <label for="status" class="form-label">Filter by Status:</label>
+        <select name="status" id="status" class="form-select" onchange="this.form.submit()">
+            <option value="" {% if not status_filter %}selected{% endif %}>All</option>
+            <option value="Pending" {% if status_filter == "Pending" %}selected{% endif %}>Pending</option>
+            <option value="Processing" {% if status_filter == "Processing" %}selected{% endif %}>Processing</option>
+            <option value="Shipped" {% if status_filter == "Shipped" %}selected{% endif %}>Shipped</option>
+            <option value="Delivered" {% if status_filter == "Delivered" %}selected{% endif %}>Delivered</option>
+            <option value="Cancelled" {% if status_filter == "Cancelled" %}selected{% endif %}>Cancelled</option>
+        </select>
+    </form>
+
+    <!-- Orders Table -->
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.unique_order_id }}</td>
+                <td>{{ order.created_at|date:"F j, Y, g:i a" }}</td>
+                <td>₹{{ order.total_amount }}</td>
+                <td><span class="badge bg-primary">{{ order.status }}</span></td>
+                <td><a href="{% url 'order_detail' order.unique_order_id %}" class="btn btn-sm btn-info">View</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No orders found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

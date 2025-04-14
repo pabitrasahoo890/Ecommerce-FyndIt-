@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>{% block title %}Verify OTP - FyndIt{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/authapp/otp_verify.css' %}">
+</head>
+{% if messages %}
+  {% for message in messages %}
+      {{ message }}
+  {% endfor %}
+{% endif %}
+
+<body>
+    <div class="container">
+        {% block content %}
+        <div class="otp-box">
+            <h2>OTP Verification</h2>
+            <p>Enter the OTP sent to your mobile number.</p>
+            <form id="otpForm" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.otp }}
+                    {% if form.otp.errors %}
+                        <div class="error-message">
+                            {% for error in form.otp.errors %}
+                                <p style="color: rgb(176, 43, 43); font-size: 14px; margin-top: 4px;">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+                <button type="submit">Verify OTP</button>
+            </form>
+        </div>
+        {% endblock %}
+    </div>
+</body>
+</html>

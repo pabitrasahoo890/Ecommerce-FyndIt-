@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-end">
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Back</a>
+    </div>
+    <h2>Your Shopping Cart</h2>
+    {% if cart_items %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>
+                        <form action="{% url 'update_cart' item.id %}" method="post" style="display: flex; align-items: center;">
+                            {% csrf_token %}
+                            <button type="submit" name="action" value="decrease" class="btn btn-outline-secondary btn-sm">-</button>
+                            <input type="text" name="quantity" value="{{ item.quantity }}" class="text-center" style="width: 40px; border: none;" readonly>
+                            <button type="submit" name="action" value="increase" class="btn btn-outline-secondary btn-sm">+</button>
+                        </form>
+                    </td>                    
+                    <td>₹{{ item.product.price }}</td>
+                    <td>₹{{ item.total_price }}</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm" onclick="confirmRemove(event, this)">Remove</a>
+                        <a href="{% url 'move_to_wishlist' item.product.id %}" class="btn btn-secondary btn-sm">
+                            ❤️ Move to Wishlist
+                        </a>
+                    
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h4>Total: ₹{{ total_price }}</h4>
+        <div class="d-flex justify-content-between mt-3">
+            <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
+
+        </div>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+    <script>
+        function confirmRemove(event, link) {
+            event.preventDefault(); // Prevent immediate navigation
+    
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This item will be removed from your cart!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, remove it!",
+                cancelButtonText: "No, keep it"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = link.href; // Proceed to remove item
+                }
+            });
+        }
+    </script>
+</div>
+{% endblock %}

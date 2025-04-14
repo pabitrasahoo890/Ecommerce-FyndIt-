@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Product Name</th>
+            <th>Unit Price</th>
+            <th>Stock Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in wishlist_items %}
+        <tr>
+            <!-- Remove from Wishlist -->
+            <td>
+                <a href="{% url 'remove_from_wishlist' item.product.id %}" class="text-danger text-decoration-none" onclick="confirmRemove(event, this)">
+                    ❌
+                </a>
+            </td>
+
+            <!-- Product Image & Name -->
+            <td>
+                <img src="{{ item.product.image.url }}" width="50" height="50" alt="{{ item.product.name }}">
+                <a href="{% url 'product_detail' item.product.id %}" class="text-dark text-decoration-none">
+                    {{ item.product.name }}
+                </a>
+            </td>
+
+            <!-- Price -->
+            <td>
+                {% if item.product.price %}
+                    <span class="text-success">₹{{ item.product.price }}</span>
+                {% else %}
+                    <span>Price not available</span>
+                {% endif %}
+            </td>
+
+            <!-- Stock Status -->
+            <td>
+                {% if item.product.stock %}
+                    <span class="text-success">In Stock</span>
+                {% else %}
+                    <span class="text-danger">Out of Stock</span>
+                {% endif %}
+            </td>
+
+            <!-- Add to Cart -->
+            <td>
+                <a href="{% url 'move_to_cart' item.product.id %}" class="btn btn-success">
+                    Add to Cart
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">Your wishlist is empty.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+    <div class="d-flex justify-content-between my-3">
+        
+        <!-- Left: Home Button -->
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+            🏠 Back to Home
+        </a>
+        <!-- Right: Cart Button -->
+        <a href="{% url 'cart_view' %}" class="btn btn-primary">
+            🛒 Go to Cart
+        </a>
+    </div>
+    
+</table>
+<script>
+    function confirmRemove(event, link) {
+        event.preventDefault(); // Prevent immediate navigation
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "This item will be removed from your wishlist!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, remove it!",
+            cancelButtonText: "No, keep it"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = link.href; // Proceed to remove item
+            }
+        });
+    }
+</script>
+{% endblock %}

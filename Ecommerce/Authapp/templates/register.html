@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/authapp/register.css' %}">
+    <title>{% block title %}Register - FyndIt{% endblock %}</title>
+</head>
+<body>
+    <div class="container">
+        {% block content %}
+        <div class="registration-box">
+            <h2>FyndIt...</h2>
+            <form id="registrationForm" method="POST">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">
+                                {% for error in field.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit">Register</button>
+                <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+                <p>Are you a guest? <a href="{% url 'home' %}">Click here</a></p>
+            </form>
+        </div>
+        {% endblock %}
+    </div>
+</body>
+</html>

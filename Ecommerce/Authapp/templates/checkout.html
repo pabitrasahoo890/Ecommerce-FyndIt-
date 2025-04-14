@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center fw-bold">Checkout</h2>
+
+    <div class="row">
+        <!-- Left Column: Order Summary -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white fw-bold">Order Summary</div>
+                <div class="card-body">
+                    {% for item in cart_items %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <p class="mb-0 fw-semibold">{{ item.product.name }} (x{{ item.quantity }})</p>
+                            <p class="mb-0 text-success fw-bold">₹{{ item.product.price }}</p>
+                        </div>
+                    {% endfor %}
+                    <hr>
+                    <h5 class="text-end fw-bold text-primary">Total: ₹{{ total_amount }}</h5>
+                    <a href="{% url 'cart_view' %}"><button class="btn btn-secondary shadow-sm">Back</button></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Shipping & Payment -->
+        <div class="col-md-6">
+            <form method="POST" class="needs-validation p-3 bg-light rounded shadow-sm">
+                {% csrf_token %}
+
+                <!-- Shipping Address Section -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-secondary text-white fw-bold">Shipping Address</div>
+                    <div class="card-body">
+                        {{ shipping_form.as_p }}
+                    </div>
+                </div>
+
+                <!-- Payment Method Section -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-dark text-white fw-bold">Payment Method</div>
+                    <div class="card-body">
+                        {{ payment_form.as_p }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-lg btn-primary w-100 fw-bold shadow-sm">
+                    <i class="fas fa-shopping-cart"></i> Place Order
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

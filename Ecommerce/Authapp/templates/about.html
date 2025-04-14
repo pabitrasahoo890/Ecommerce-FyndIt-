@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="about-hero bg-light py-5">
+  <div class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-4">Our Story</h1>
+        <p class="lead">Crafting exceptional experiences since 2015</p>
+      </div>
+      <div class="col-lg-6">
+        <img src="{% static 'images/about-hero.jpg' %}" class="img-fluid rounded shadow" alt="Our Team">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Why We Exist</h2>
+      <div class="divider mx-auto bg-primary"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-bullseye fs-1 text-primary mb-3"></i>
+            <h3>Our Mission</h3>
+            <p>To deliver high-quality products with exceptional customer service at affordable prices.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-eye fs-1 text-primary mb-3"></i>
+            <h3>Our Vision</h3>
+            <p>To become the most trusted ecommerce platform in our niche by 2025.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-heart fs-1 text-primary mb-3"></i>
+            <h3>Our Values</h3>
+            <p>Integrity, Innovation, Customer-Centric Approach, and Sustainability.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="bg-light py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Meet The Team</h2>
+      <div class="divider mx-auto bg-primary"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="{% static 'images/team1.jpg' %}" class="card-img-top" alt="Team Member">
+          <div class="card-body text-center">
+            <h5 class="card-title">Pabitra Sahoo</h5>
+            <p class="text-muted">Founder & CEO</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="{% static 'images/team4.webp' %}" class="card-img-top" alt="Team Member">
+          <div class="card-body text-center">
+            <h5 class="card-title">Amelia Patel</h5>
+            <p class="text-muted">HR Manager</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="{% static 'images/team2.avif' %}" class="card-img-top" alt="Team Member">
+          <div class="card-body text-center">
+            <h5 class="card-title">Abhisek Mohapatra</h5>
+            <p class="text-muted">Diverse team member</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="{% static 'images/team3.jpg' %}" class="card-img-top" alt="Team Member">
+          <div class="card-body text-center">
+            <h5 class="card-title">Sarah Franklin</h5>
+            <p class="text-muted">Marketing Head</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Repeat for other team members -->
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-3">
+        <h3 class="display-4 fw-bold">5K+</h3>
+        <p>Happy Customers</p>
+      </div>
+      <div class="col-md-3">
+        <h3 class="display-4 fw-bold">8+</h3>
+        <p>Years Experience</p>
+      </div>
+      <div class="col-md-3">
+        <h3 class="display-4 fw-bold">500+</h3>
+        <p>Products</p>
+      </div>
+      <div class="col-md-3">
+        <h3 class="display-4 fw-bold">24/7</h3>
+        <p>Customer Support</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-hero {
+    background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
+                url('{% static "images/about-bg.jpg" %}');
+    background-size: cover;
+    background-position: center;
+  }
+  .divider {
+    width: 80px;
+    height: 3px;
+    margin: 15px auto;
+  }
+  .card {
+    transition: transform 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+</style>
+{% endblock %}

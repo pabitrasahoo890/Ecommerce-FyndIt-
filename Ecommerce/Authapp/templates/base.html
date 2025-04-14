@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-Commerce{% endblock %}</title>
+    {% load static %}
+    
+     <!-- Bootstrap 5 CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+     <!-- Font Awesome for Icons -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+     
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Playwrite+IT+Moderna:wght@100..400&display=swap');
+        .navbar {
+            background-color: #1E73DC;
+            padding: 10px;
+        }
+    
+        .navbar-brand {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+        }
+    
+        .nav-item a {
+            color: black;
+            font-weight: 500;
+            padding: 10px 15px;
+        }
+    
+        .search-bar {
+            width: 50%;
+            position: relative;
+        }
+    
+        .search-bar input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
+    
+        .search-bar button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+        }
+    
+        .top-icons a {
+            color: white;
+            font-size: 16px;
+            margin-left: 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    
+        .dropdown-menu {
+            min-width: 150px;
+            border-radius: 8px;
+        }
+    
+        .dropdown-menu li a {
+            color: rgb(0, 0, 0);
+            width: 80%;
+        }
+    
+        .dropdown a {
+            text-decoration: none;
+            /* ✅ Removes underline from dropdown links */
+        }
+        /* Tablet */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .navbar-brand img {
+            width: 140px !important;
+    }
+}
+
+        
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.png' %}" 
+                 alt="Logo"
+                 class="img-fluid"
+                 style="max-width: 180px; /* Desktop size */
+                        width: 120px; /* Default size */
+                        height: auto;">
+        </a>
+        
+        <!-- Search Bar -->
+        <div class="search-bar mx-auto">
+            <form action="{% url 'home' %}" method="GET" class="d-flex">
+                <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="Search your product" required>
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+        <!-- Cart, Wishlist, and User Profile -->
+        <div class="top-icons d-flex">
+            <a href="{% url 'cart_view' %}" class="position-relative">
+                <i class="fas fa-shopping-cart fa-lg"></i>
+                <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ cart_count }}
+                </span>
+            </a>
+            <a href="{% url 'wishlist' %}" class="position-relative">
+                <i class="fas fa-heart fa-lg"></i>
+                <span id="wislist-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ wishlist_count }}
+                </span>
+            </a>
+            
+            
+            <!-- User Dropdown -->
+            <div class="dropdown ms-3 position-relative">
+                <a href="#" class="text-white dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user"></i>
+                    {% if user.is_authenticated %}
+                        {{ user.name }}
+                    {% else %}
+                        Profile
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    {% if user.is_authenticated %}
+                        <li><a class="dropdown-item fw-normal" href="{% url 'profile' %}"><i class="fa fa-user-edit"></i> Update Profile</a></li>
+                        <li><a class="dropdown-item fw-normal" href="{% url 'order_list' %}"><i class="fa fa-shopping-bag"></i> Orders</a></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}" onclick="confirmLogout(event, this)"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+                    {% else %}
+                        <li><a class="dropdown-item fw-normal" href="{% url 'login' %}"><i class="fa fa-sign-in-alt"></i> Login</a></li>
+                        <li><a class="dropdown-item fw-normal" href="{% url 'register' %}"><i class="fa fa-user-plus"></i> Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Bottom Navigation -->
+<div class="bg-light py-2">
+    <div class="container d-flex justify-content-center">
+        <ul class="nav">
+            <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">All Products</a></li>
+
+            {% for category in categories %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="{{ category.slug }}Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ category.name }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="{{ category.slug }}Dropdown">
+                        {% for subcategory in category.subcategory.all %}
+                            <li><a class="dropdown-item" href="{% url 'category_view' subcategory.slug %}">{{ subcategory.name }}</a></li>
+                        {% empty %}
+                            <li><a class="dropdown-item" href="#">No Subcategories</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% if messages %}
+{% for message in messages %}
+    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% elif message.tags == 'error' %}alert-danger{% endif %} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+{% endif %}
+    <!-- Main Content -->
+    <div class="container my-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light text-center py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <!-- Quick Links -->
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <a href="{% url 'contact_us' %}" class="text-light d-block">Contact Us</a>
+                    <a href="{% url 'about' %}" class="text-light d-block">About Us</a>
+                </div>
+
+                <!-- Customer Support -->
+                <div class="col-md-3">
+                    <h5>Customer Support</h5>
+                    <p>📞 1234567890</p>
+                    <p>📧 pspabitra890@gmail.com</p>
+                    <p>❓ <a href="#" class="text-light">FAQs</a></p>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="col-md-3">
+                    <h5>Payment Methods</h5>
+                    <img src="{% static 'images/authapp/razorpay.png' %}" alt="RazorPay" class="img-fluid mx-2" width="50">
+                    <img src="{% static 'images/authapp/visa.png' %}" alt="Visa" class="img-fluid mx-2" width="50">
+                    <img src="{% static 'images/authapp/masterCard.png' %}" alt="MasterCard" class="img-fluid mx-2" width="50">
+                    <img src="{% static 'images/authapp/upi.png' %}" alt="UPI" class="img-fluid mx-2" width="50">
+                </div>
+
+                <!-- Social Media -->
+                <div class="col-md-3">
+                    <h5>Follow Us</h5>
+                    <a href="https://www.linkedin.com/in/pabitra-sahoo-71954921b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="text-light mx-2"><i class="fab fa-linkedin fa-lg"></i></a>
+                    <a href="https://www.instagram.com/ps_pabitra_22_25?igsh=MWE4ejJlOHdteHNkcw==" target="_blank" class="text-light mx-2"><i class="fab fa-instagram fa-lg"></i></a>
+                    <a href="#" class="text-light mx-2"><i class="fab fa-twitter fa-lg"></i></a>
+                </div>
+            </div>
+
+            <hr class="bg-light">
+            <p class="mb-0">&copy; {% block copyright_year %}2025{% endblock %} Fynd It. All rights reserved.</p>
+            <p>~ Developed By Pabitra Sahoo</p>
+        </div>
+    </footer>
+
+    <script>
+        setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.transition = "opacity 0.5s";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 2500);
+
+
+        function confirmLogout(event, link) {
+            event.preventDefault(); // Prevent immediate navigation
+    
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Want to Logout!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = link.href; // Proceed to remove item
+                }
+            });
+        }
+    </script>
+    <!-- Bootstrap Script -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
