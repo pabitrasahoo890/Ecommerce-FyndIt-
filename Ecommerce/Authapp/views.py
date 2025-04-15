@@ -251,7 +251,7 @@ def product_detail_view(request, pk):
 def cart_view(request):
     return render(request, 'cart.html')
 
-@login_required
+@login_required(login_url='login')
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
@@ -265,7 +265,7 @@ def add_to_cart(request, product_id):
     return redirect("home")
 
 
-@login_required
+@login_required(login_url='login')
 def update_cart(request, item_id):
     cart_item = get_object_or_404(Cart, id=item_id, user=request.user)
 
@@ -288,14 +288,14 @@ def update_cart(request, item_id):
     return redirect('cart_view')
 
 # ✅ View Cart
-@login_required
+@login_required(login_url='login')
 def cart_view(request):
     cart_items = Cart.objects.filter(user=request.user)
     total_price = sum(item.total_price() for item in cart_items)
     return render(request, "cart.html", {"cart_items": cart_items, "total_price": total_price})
 
 # ✅ Remove product from cart
-@login_required
+@login_required(login_url='login')
 def remove_from_cart(request, cart_id):
     cart_item = get_object_or_404(Cart, id=cart_id, user=request.user)
     cart_item.delete()
@@ -303,13 +303,13 @@ def remove_from_cart(request, cart_id):
     return redirect("cart_view")
 
 
-@login_required
+@login_required(login_url='login')
 def wishlist_view(request):
     """View wishlist items"""
     wishlist_items = Wishlist.objects.filter(user=request.user)
     return render(request, "wishlist.html", {"wishlist_items": wishlist_items})
 
-@login_required
+@login_required(login_url='login')
 def add_to_wishlist(request, product_id):
     """Add a product to the wishlist"""
     product = get_object_or_404(Product, id=product_id)
@@ -323,7 +323,7 @@ def add_to_wishlist(request, product_id):
 
     return redirect("home")
 
-@login_required
+@login_required(login_url='login')
 def remove_from_wishlist(request, product_id):
     """Remove a product from the wishlist"""
     product = get_object_or_404(Product, id=product_id)
@@ -337,7 +337,7 @@ def remove_from_wishlist(request, product_id):
 
     return redirect("wishlist")
 
-@login_required
+@login_required(login_url='login')
 def move_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
